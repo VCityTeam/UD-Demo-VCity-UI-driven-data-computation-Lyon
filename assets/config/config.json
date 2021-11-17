@@ -6,64 +6,16 @@
   },
   "3DTilesLayers": [
     {
-      "id": "Lyon-1",
-      "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/2015/Lyon-1_2015/tileset.json",
-      "color": "0xFFFFFF"
-    },
-    {
-      "id": "Lyon-2",
-      "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/2015/Lyon-2_2015/tileset.json",
-      "color": "0xFFFFFF"
-    },
-    {
-      "id": "Lyon-3",
-      "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/2015/Lyon-3_2015/tileset.json",
-      "color": "0xFFFFFF"
-    },
-    {
-      "id": "Lyon-4",
-      "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/2015/Lyon-4_2015/tileset.json",
-      "color": "0xFFFFFF"
-    },
-    {
-      "id": "Lyon-5",
-      "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/2015/Lyon-5_2015/tileset.json",
-      "color": "0xFFFFFF"
-    },
-    {
-      "id": "Lyon-6",
-      "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/2015/Lyon-6_2015/tileset.json",
-      "color": "0xFFFFFF"
-    },
-    {
-      "id": "Lyon-7",
-      "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/2015/Lyon-7_2015/tileset.json",
-      "color": "0xFFFFFF"
-    },
-    {
-      "id": "Lyon-8",
-      "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/2015/Lyon-8_2015/tileset.json",
-      "color": "0xFFFFFF"
+      "id": "3d-tiles-layer-relief",
+      "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/Lyon_LOD/relief/tileset.json",
+      "color": "0xd0ac7f"
     }
   ],
-  "server": {
-    "url": "http://rict.liris.cnrs.fr:1525/",
-    "login": "login",
-    "user": "user",
-    "userMe": "user/me",
-    "document": "document",
-    "documentToValidate": "document/in_validation",
-    "comment": "comment",
-    "validate": "document/validate",
-    "file": "file",
-    "guidedTour": "guidedTour",
-    "link": "link"
-  },
   "extents": {
-    "min_x": "1837860.980127206",
-    "max_x": "1851647",
-    "min_y": "5169347.4265999",
-    "max_y": "5180575"
+    "min_x": "1837500",
+    "max_x": "1848000",
+    "min_y": "5167500",
+    "max_y": "5180900"
   },
   "projection": "EPSG:3946",
   "background_image_layer": {
@@ -85,62 +37,6 @@
       "range": "3000",
       "heading": "-49.6",
       "tilt": "17"
-    }
-  },
-  "3DTilesLayer": {
-    "id": "3d-tiles-layer-building",
-    "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/Lyon_2015-gltf-repaired_TileSet/tileset.json",
-    "color": "0xFFFFFF",
-    "initTilesManager": "true"
-  },
-  "temporalModule": {
-    "view": "SLIDERWINDOW",
-    "minTime": 2009,
-    "maxTime": 2015,
-    "currentTime": 2009,
-    "timeStep": 1
-  },
-  "geocoding": {
-    "url": "https://nominatim.openstreetmap.org/search",
-    "credit": "© OpenStreetMap contributors under <a href=\"https://www.openstreetmap.org/copyright\">ODbL</a>",
-    "requestTimeIntervalMs": "1000",
-    "result": {
-      "format": "json",
-      "basePath": "",
-      "lng": "lon",
-      "lat": "lat"
-    },
-    "parameters": {
-      "q": {
-        "fill": "query"
-      },
-      "format": {
-        "fill": "value",
-        "value": "json"
-      },
-      "viewbox": {
-        "fill": "extent",
-        "format": "WEST,SOUTH,EAST,NORTH"
-      }
-    }
-  },
-  "cityObjects": {
-    "styles": {
-      "layerDefault": {
-        "materialProps": {
-          "color": "#ffa14f"
-        }
-      },
-      "selection": {
-        "materialProps": {
-          "color": "#13ddef"
-        }
-      },
-      "linkedWithDisplayedDocument": {
-        "materialProps": {
-          "color": "#4c5af7"
-        }
-      }
     }
   }
 }
