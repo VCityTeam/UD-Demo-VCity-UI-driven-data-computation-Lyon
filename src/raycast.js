@@ -4,23 +4,19 @@ const raycaster = new THREE.Raycaster();
 var objectsToRaycast = [];
 
 function setObjects3D(tiles) {
-  var objectsToRaycast = [];
-
   for (let tile of tiles) {
     if (tile) {
       var obj3D = tile.getObject3D();
       if (obj3D) objectsToRaycast.push(obj3D);
     }
   }
-  return objectsToRaycast;
 }
-export function setObjectsToRaycast(layers, targetLayerId) {
+export function setObjectsToRaycast(layers, targetLayerIds) {
   objectsToRaycast = [];
 
   for (let [id, value] of Object.entries(layers)) {
-    if (id === targetLayerId) {
-      objectsToRaycast = setObjects3D(value[1].tiles);
-      break;
+    if (targetLayerIds.includes(id)) {
+      setObjects3D(value[1].tiles);
     }
   }
 }

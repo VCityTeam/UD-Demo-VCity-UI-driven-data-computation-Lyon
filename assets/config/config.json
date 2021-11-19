@@ -9,6 +9,11 @@
       "id": "3d-tiles-layer-relief",
       "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/Lyon_LOD/relief/tileset.json",
       "color": "0xd0ac7f"
+    },
+    {
+      "id": "3d-tiles-layer-bridges",
+      "url": "./assets/bridges/tileset.json",
+      "color": "0xAC7FD0"
     }
   ],
   "extents": {

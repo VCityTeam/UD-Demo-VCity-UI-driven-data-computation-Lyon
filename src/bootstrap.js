@@ -14,7 +14,7 @@ function preventDefaults(e) {
 }
 
 function handleDrop(e) {
-  setObjectsToRaycast(layers, '3d-tiles-layer-relief');
+  setObjectsToRaycast(layers, ['3d-tiles-layer-relief','3d-tiles-layer-bridges']);
   let dt = e.dataTransfer;
   for (let file of dt.files) readFile(file);
 }
