@@ -11,13 +11,11 @@ function setObjects3D(tiles) {
     }
   }
 }
-export function setObjectsToRaycast(layers, targetLayerIds) {
-  objectsToRaycast = [];
 
+export function setObjectsToRaycast(layers) {
+  objectsToRaycast = [];
   for (let [id, value] of Object.entries(layers)) {
-    if (targetLayerIds.includes(id)) {
-      setObjects3D(value[1].tiles);
-    }
+    if (value[0].visible) setObjects3D(value[1].tiles);
   }
 }
 
@@ -30,16 +28,8 @@ function raycastObjects3D(rayOrigin, rayDirection) {
 }
 
 export function raycastOnPoint(point) {
-  var origin = new THREE.Vector3(
-    point[0],
-    point[1],
-    point[2] + 9999
-  );
-  var direction = new THREE.Vector3(
-    0,
-    0,
-    -1
-  );
+  var origin = new THREE.Vector3(point[0], point[1], point[2] + 9999);
+  var direction = new THREE.Vector3(0, 0, -1);
   var positionOnGround = raycastObjects3D(origin, direction);
   return positionOnGround;
 }
