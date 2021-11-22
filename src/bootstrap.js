@@ -14,7 +14,10 @@ function preventDefaults(e) {
 }
 
 function handleDrop(e) {
-  setObjectsToRaycast(layers, ['3d-tiles-layer-relief','3d-tiles-layer-bridges']);
+  setObjectsToRaycast(layers, [
+    '3d-tiles-layer-relief',
+    '3d-tiles-layer-bridges',
+  ]);
   let dt = e.dataTransfer;
   for (let file of dt.files) readFile(file);
 }
@@ -25,23 +28,46 @@ function handleDrop(e) {
 
 body.addEventListener('drop', handleDrop, false);
 
+function lerp(pointA, pointB, t) {
+  var a = pointA.map(function (x) {
+    return x * t;
+  });
+  var b = pointB.map(function (x) {
+    return x * (1 - t);
+  });
+  return a.map(function (x, idx) {
+    return x + b[idx];
+  });
+}
+
+function updateZValue(point) {
+  var positionOnGround = raycastOnPoint(point);
+  if (positionOnGround !== undefined) point[2] = positionOnGround.z;
+  return point;
+}
+
 function updateValues(fileData, fileName) {
   var jsonData = JSON.parse(fileData);
   for (let feature of jsonData.features) {
-    if (feature.geometry.type === 'MultiLineString') {
-      for (let point of feature.geometry.coordinates[0]) {
-        var positionOnGround = raycastOnPoint(point);
-        if (positionOnGround !== undefined && positionOnGround.z > point[2])
-          point[2] = positionOnGround.z;
-      }
-    } else if (feature.geometry.type === 'LineString') {
-      for (let point of feature.geometry.coordinates) {
-        var positionOnGround = raycastOnPoint(point);
-        if (positionOnGround !== undefined && positionOnGround.z > point[2])
-          point[2] = positionOnGround[2];
+    var newPoints = [];
+    var points = [];
+    if (feature.geometry.type === 'LineString')
+      points = feature.geometry.coordinates;
+    if (feature.geometry.type === 'MultiLineString')
+      points = feature.geometry.coordinates[0];
+    for (let i = 0; i < points.length - 1; i++) {
+      for (let t = 10; t > 0; t -= 10) {
+        var point = lerp(points[i], points[i + 1], t / 10);
+        newPoints.push(updateZValue(point));
       }
     }
+    newPoints.push(updateZValue(points[points.length - 1]));
+    if (feature.geometry.type === 'LineString')
+      feature.geometry.coordinates = newPoints;
+    if (feature.geometry.type === 'MultiLineString')
+      feature.geometry.coordinates[0] = newPoints;
   }
+
   var newJsonData = JSON.stringify(jsonData);
   var bb = new Blob([newJsonData], { type: 'text/plain' });
   var a = document.createElement('a');
@@ -60,8 +86,6 @@ function readFile(file) {
 }
 
 app.start('../assets/config/config.json').then((config) => {
-  app.addBaseMapLayer();
-
   layers = app.setupAndAdd3DTilesLayers();
 
   ////// 3DTILES DEBUG
