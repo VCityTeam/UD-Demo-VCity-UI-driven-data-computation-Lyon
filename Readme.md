@@ -1,6 +1,11 @@
 # Roads from 3D relief and bridges
 
-Update drag-and-dropped files by raycasting on 3DTiles models. The files must be __GeoJson__ files containing `LineString` or `MultiLineString` features. The coordinates of those lines will be updated with the altitude (Z coordinate) of the raycast intersection point.
+Update drag-and-dropped files by raycasting on 3DTiles models. The files must be __GeoJson__ files containing `LineString` or `MultiLineString` features. The coordinates of those lines will be updated with the altitude (Z coordinate) of the raycast intersection point.  
+The raycast only works on visible 3DTiles layers. If you don't want to use relief/bridges to update your altitudes, you can hide the corresponding layer with the `LayerChoice` widget.
+
+Set layers visible/invisible:
+
+![visible](screenshot/visible_layers.png)
 
 Drag and drop:
 
