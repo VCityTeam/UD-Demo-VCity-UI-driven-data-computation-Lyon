@@ -82,7 +82,7 @@ function readFile(file) {
   reader.readAsText(file);
 }
 
-app.start('../assets/config/config.json').then((config) => {
+app.start('../assets/config/config.json').then(() => {
   layers = app.setupAndAdd3DTilesLayers();
 
   ////// 3DTILES DEBUG

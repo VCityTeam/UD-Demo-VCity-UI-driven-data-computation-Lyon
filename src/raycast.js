@@ -15,7 +15,7 @@ function setObjects3D(tiles) {
 export function setObjectsToRaycast(layers) {
   objectsToRaycast = [];
   for (let [id, value] of Object.entries(layers)) {
-    if (value[0].visible) setObjects3D(value[1].tiles);
+    if (id !== undefined && value[0].visible) setObjects3D(value[1].tiles);
   }
 }
 
