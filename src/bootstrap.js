@@ -2,11 +2,15 @@
 
 import * as udviz from 'ud-viz';
 import { raycastOnPoint, setObjectsToRaycast } from './raycast';
+import { MeshLine, MeshLineMaterial } from 'meshline';
 
 var layers = null;
 const app = new udviz.Templates.AllWidget();
-
+var scene = null;
+var camera = null;
 var body = document.body;
+var renderer = null;
+var material = null;
 
 function preventDefaults(e) {
   e.preventDefault();
@@ -24,6 +28,19 @@ function handleDrop(e) {
 });
 
 body.addEventListener('drop', handleDrop, false);
+
+async function drawLine(coords) {
+  const points = [];
+  for (let coord of coords) {
+    points.push(coord[0], coord[1], coord[2] + 0.5);
+  }
+  const line = new MeshLine();
+  line.setPoints(points);
+
+  const mesh = new udviz.THREE.Mesh(line, material);
+  scene.add(mesh);
+  renderer.render(scene, camera);
+}
 
 function lerp(pointA, pointB, t) {
   var a = pointA.map(function (x) {
@@ -43,7 +60,7 @@ function updateZValue(point) {
   return point;
 }
 
-function updateValues(fileData, fileName) {
+async function updateValues(fileData, fileName) {
   var jsonData = JSON.parse(fileData);
   for (let feature of jsonData.features) {
     var newPoints = [];
@@ -59,6 +76,7 @@ function updateValues(fileData, fileName) {
       }
     }
     newPoints.push(updateZValue(points[points.length - 1]));
+    drawLine(newPoints);
     if (feature.geometry.type === 'LineString')
       feature.geometry.coordinates = newPoints;
     if (feature.geometry.type === 'MultiLineString')
@@ -96,4 +114,13 @@ app.start('../assets/config/config.json').then(() => {
   ////// LAYER CHOICE MODULE
   const layerChoice = new udviz.Widgets.LayerChoice(app.layerManager);
   app.addModuleView('layerChoice', layerChoice);
+
+  scene = app.view.scene;
+  camera = app.view.camera.camera3D;
+
+  renderer = new udviz.THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+  const options = { color: new udviz.THREE.Color(0, 0, 0), lineWidth: 3 };
+  material = new MeshLineMaterial(options);
 });
