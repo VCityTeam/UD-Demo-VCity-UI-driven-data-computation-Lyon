@@ -37,7 +37,7 @@ async function drawLine(coords) {
   const line = new MeshLine();
   line.setPoints(points);
 
-  const mesh = new udviz.THREE.Mesh( line, material );
+  const mesh = new udviz.THREE.Mesh(line, material);
   scene.add(mesh);
   renderer.render(scene, camera);
 }
@@ -121,6 +121,6 @@ app.start('../assets/config/config.json').then(() => {
   renderer = new udviz.THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
-  const options = {color: new udviz.THREE.Color(0, 0, 0), lineWidth: 3};
+  const options = { color: new udviz.THREE.Color(0, 0, 0), lineWidth: 3 };
   material = new MeshLineMaterial(options);
 });
