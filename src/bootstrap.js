@@ -2,12 +2,15 @@
 
 import * as udviz from 'ud-viz';
 import { raycastOnPoint, setObjectsToRaycast } from './raycast';
+import { MeshLine, MeshLineMaterial } from 'meshline';
 
 var layers = null;
 const app = new udviz.Templates.AllWidget();
 var scene = null;
 var camera = null;
 var body = document.body;
+var renderer = null;
+var material = null;
 
 function preventDefaults(e) {
   e.preventDefault();
@@ -26,15 +29,16 @@ function handleDrop(e) {
 
 body.addEventListener('drop', handleDrop, false);
 
-function drawLine(coords) {
-  const material = new udviz.THREE.LineBasicMaterial( { color: 0x0000ff } );
+async function drawLine(coords) {
   const points = [];
-  for(let coord of coords) {
-    points.push(new udviz.THREE.Vector3(coord));
+  for (let coord of coords) {
+    points.push(coord[0], coord[1], coord[2] + 0.5);
   }
-  const geometry = new udviz.THREE.BufferGeometry().setFromPoints( points );
-  const line = new udviz.THREE.Line( geometry, material );
-  scene.add(line);
+  const line = new MeshLine();
+  line.setPoints(points);
+
+  const mesh = new udviz.THREE.Mesh( line, material );
+  scene.add(mesh);
   renderer.render(scene, camera);
 }
 
@@ -56,7 +60,7 @@ function updateZValue(point) {
   return point;
 }
 
-function updateValues(fileData, fileName) {
+async function updateValues(fileData, fileName) {
   var jsonData = JSON.parse(fileData);
   for (let feature of jsonData.features) {
     var newPoints = [];
@@ -111,7 +115,12 @@ app.start('../assets/config/config.json').then(() => {
   const layerChoice = new udviz.Widgets.LayerChoice(app.layerManager);
   app.addModuleView('layerChoice', layerChoice);
 
-  console.debug(app.view);
   scene = app.view.scene;
-  camera = app.view.camera;
+  camera = app.view.camera.camera3D;
+
+  renderer = new udviz.THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+  const options = {color: new udviz.THREE.Color(0, 0, 0), lineWidth: 3};
+  material = new MeshLineMaterial(options);
 });
