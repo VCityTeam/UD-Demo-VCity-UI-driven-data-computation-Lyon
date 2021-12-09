@@ -5,7 +5,8 @@ import { raycastOnPoint, setObjectsToRaycast } from './raycast';
 
 var layers = null;
 const app = new udviz.Templates.AllWidget();
-
+var scene = null;
+var camera = null;
 var body = document.body;
 
 function preventDefaults(e) {
@@ -24,6 +25,18 @@ function handleDrop(e) {
 });
 
 body.addEventListener('drop', handleDrop, false);
+
+function drawLine(coords) {
+  const material = new udviz.THREE.LineBasicMaterial( { color: 0x0000ff } );
+  const points = [];
+  for(let coord of coords) {
+    points.push(new udviz.THREE.Vector3(coord));
+  }
+  const geometry = new udviz.THREE.BufferGeometry().setFromPoints( points );
+  const line = new udviz.THREE.Line( geometry, material );
+  scene.add(line);
+  renderer.render(scene, camera);
+}
 
 function lerp(pointA, pointB, t) {
   var a = pointA.map(function (x) {
@@ -59,6 +72,7 @@ function updateValues(fileData, fileName) {
       }
     }
     newPoints.push(updateZValue(points[points.length - 1]));
+    drawLine(newPoints);
     if (feature.geometry.type === 'LineString')
       feature.geometry.coordinates = newPoints;
     if (feature.geometry.type === 'MultiLineString')
@@ -96,4 +110,8 @@ app.start('../assets/config/config.json').then(() => {
   ////// LAYER CHOICE MODULE
   const layerChoice = new udviz.Widgets.LayerChoice(app.layerManager);
   app.addModuleView('layerChoice', layerChoice);
+
+  console.debug(app.view);
+  scene = app.view.scene;
+  camera = app.view.camera;
 });
