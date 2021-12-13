@@ -11,6 +11,8 @@ var camera = null;
 var body = document.body;
 var renderer = null;
 var material = null;
+var jsonData = null;
+var fileName = null;
 
 function preventDefaults(e) {
   e.preventDefault();
@@ -29,7 +31,7 @@ function handleDrop(e) {
 
 body.addEventListener('drop', handleDrop, false);
 
-async function drawLine(coords) {
+function drawLine(coords) {
   const points = [];
   for (let coord of coords) {
     points.push(coord[0], coord[1], coord[2] + 0.5);
@@ -60,29 +62,41 @@ function updateZValue(point) {
   return point;
 }
 
-async function updateValues(fileData, fileName) {
-  var jsonData = JSON.parse(fileData);
-  for (let feature of jsonData.features) {
-    var newPoints = [];
-    var points = [];
-    if (feature.geometry.type === 'LineString')
-      points = feature.geometry.coordinates;
-    if (feature.geometry.type === 'MultiLineString')
-      points = feature.geometry.coordinates[0];
-    for (let i = 0; i < points.length - 1; i++) {
-      for (let t = 10; t > 0; t -= 10) {
-        var point = lerp(points[i], points[i + 1], t / 10);
-        newPoints.push(updateZValue(point));
-      }
+function updateFeature(feature) {
+  var newPoints = [];
+  var points = [];
+  if (feature.geometry.type === 'LineString')
+    points = feature.geometry.coordinates;
+  if (feature.geometry.type === 'MultiLineString')
+    points = feature.geometry.coordinates[0];
+  for (let i = 0; i < points.length - 1; i++) {
+    for (let t = 10; t > 0; t -= 10) {
+      var point = lerp(points[i], points[i + 1], t / 10);
+      newPoints.push(updateZValue(point));
     }
-    newPoints.push(updateZValue(points[points.length - 1]));
-    drawLine(newPoints);
-    if (feature.geometry.type === 'LineString')
-      feature.geometry.coordinates = newPoints;
-    if (feature.geometry.type === 'MultiLineString')
-      feature.geometry.coordinates[0] = newPoints;
   }
+  newPoints.push(updateZValue(points[points.length - 1]));
+  drawLine(newPoints);
+  if (feature.geometry.type === 'LineString')
+    feature.geometry.coordinates = newPoints;
+  if (feature.geometry.type === 'MultiLineString')
+    feature.geometry.coordinates[0] = newPoints;
+}
 
+function updateData(features, callback) {
+  (function loop(i) {
+    updateFeature(features[i]);
+    if (i < features.length - 1) {
+      setTimeout(function () {
+        loop(++i);
+      }, 1);
+    } else {
+      callback();
+    }
+  })(0);
+}
+
+function downloadData() {
   var newJsonData = JSON.stringify(jsonData);
   var bb = new Blob([newJsonData], { type: 'text/plain' });
   var a = document.createElement('a');
@@ -94,8 +108,10 @@ async function updateValues(fileData, fileName) {
 function readFile(file) {
   const reader = new FileReader();
   reader.addEventListener('load', (event) => {
+    fileName = file.name;
     var data = event.target.result;
-    updateValues(data, file.name);
+    jsonData = JSON.parse(data);
+    updateData(jsonData.features, downloadData);
   });
   reader.readAsText(file);
 }
