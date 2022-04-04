@@ -42,6 +42,7 @@ function drawLine(coords) {
   const mesh = new udviz.THREE.Mesh(line, material);
   scene.add(mesh);
   renderer.render(scene, camera);
+  app.view.notifyChange(camera.camera3D);
 }
 
 function lerp(pointA, pointB, t) {
