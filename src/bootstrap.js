@@ -14,6 +14,43 @@ var material = null;
 var jsonData = null;
 var fileName = null;
 
+// Buttons CSS style
+var styles = `
+button {
+  line-height: 20px;
+  font-weight: bold;
+  border: none;
+  width: 60px;
+  font-size: 11px;
+}
+#readFile {
+  background: salmon;
+}
+#readFile:hover {
+  background: lightsalmon;
+}
+}`;
+
+var styleSheet = document.createElement('style');
+styleSheet.innerText = styles;
+document.head.appendChild(styleSheet);
+
+// Create a button which switch the processing of the 3DTiles
+let readFileButton = document.createElement('button');
+readFileButton.id = 'readFile';
+readFileButton.innerHTML = 'Click Me';
+readFileButton.onclick = function () {
+  var blob = null;
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', '../assets/road_sample.geojson');
+  xhr.responseType = 'blob';
+  xhr.onload = function () {
+    blob = xhr.response;
+    readFile(blob);
+  };
+  xhr.send();
+};
+
 function preventDefaults(e) {
   e.preventDefault();
   e.stopPropagation();
@@ -107,6 +144,7 @@ function downloadData() {
 }
 
 function readFile(file) {
+  console.log(file);
   const reader = new FileReader();
   reader.addEventListener('load', (event) => {
     fileName = file.name;
@@ -134,6 +172,14 @@ app.start('../assets/config/config.json').then(() => {
 
   scene = app.view.scene;
   camera = app.view.camera.camera3D;
+
+  // Add the buttons in the page
+  let div = document.getElementById('_all_widget_menu');
+  if (div == null) {
+    document.body.appendChild(readFileButton);
+  } else {
+    div.appendChild(readFileButton);
+  }
 
   renderer = new udviz.THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
