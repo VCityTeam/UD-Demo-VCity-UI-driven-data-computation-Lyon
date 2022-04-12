@@ -7,12 +7,12 @@
   "3DTilesLayers": [
     {
       "id": "3d-tiles-layer-relief",
-      "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/Lyon_2018_MultiLayer/Lyon_2018_Relief_TileSet//tileset.json",
+      "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/Demo/UD-Demo-vcity-py3dtilers-lyon/Lyon_2018_Relief_TileSet//tileset.json",
       "color": "0xd0ac7f"
     },
     {
       "id": "3d-tiles-layer-bridges",
-      "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/Lyon_2018_MultiLayer/Lyon_2018_Bridges_TileSet/tileset.json",
+      "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/Demo/UD-Demo-vcity-py3dtilers-lyon/Lyon_2018_Bridges_TileSet/tileset.json",
       "color": "0xAC7FD0"
     }
   ],
