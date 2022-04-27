@@ -4,18 +4,18 @@ import * as udviz from 'ud-viz';
 import { raycastOnPoint, setObjectsToRaycast } from './raycast';
 import { MeshLine, MeshLineMaterial } from 'meshline';
 
-var layers = null;
+let layers = null;
 const app = new udviz.Templates.AllWidget();
-var scene = null;
-var camera = null;
-var body = document.body;
-var renderer = null;
-var material = null;
-var jsonData = null;
-var fileName = null;
+let scene = null;
+let camera = null;
+let body = document.body;
+let renderer = null;
+let material = null;
+let jsonData = null;
+let fileName = null;
 
 // Buttons CSS style
-var styles = `
+let styles = `
 button {
   line-height: 20px;
   font-weight: bold;
@@ -31,7 +31,7 @@ button {
 }
 }`;
 
-var styleSheet = document.createElement('style');
+let styleSheet = document.createElement('style');
 styleSheet.innerText = styles;
 document.head.appendChild(styleSheet);
 
@@ -40,8 +40,8 @@ let readFileButton = document.createElement('button');
 readFileButton.id = 'readFile';
 readFileButton.innerHTML = 'Click Me';
 readFileButton.onclick = function () {
-  var blob = null;
-  var xhr = new XMLHttpRequest();
+  let blob = null;
+  let xhr = new XMLHttpRequest();
   xhr.open('GET', '../assets/road_sample.geojson');
   xhr.responseType = 'blob';
   xhr.onload = function () {
@@ -83,10 +83,10 @@ function drawLine(coords) {
 }
 
 function lerp(pointA, pointB, t) {
-  var a = pointA.map(function (x) {
+  let a = pointA.map(function (x) {
     return x * t;
   });
-  var b = pointB.map(function (x) {
+  let b = pointB.map(function (x) {
     return x * (1 - t);
   });
   return a.map(function (x, idx) {
@@ -95,22 +95,22 @@ function lerp(pointA, pointB, t) {
 }
 
 function updateZValue(point) {
-  var positionOnGround = raycastOnPoint(point);
+  let positionOnGround = raycastOnPoint(point);
   if (point.length < 3) point.push(0); 
   if (positionOnGround !== undefined) point[2] = positionOnGround.z;
   return point;
 }
 
 function updateFeature(feature) {
-  var newPoints = [];
-  var points = [];
+  let newPoints = [];
+  let points = [];
   if (feature.geometry.type === 'LineString')
     points = feature.geometry.coordinates;
   if (feature.geometry.type === 'MultiLineString')
     points = feature.geometry.coordinates[0];
   for (let i = 0; i < points.length - 1; i++) {
     for (let t = 10; t > 0; t -= 10) {
-      var point = lerp(points[i], points[i + 1], t / 10);
+      let point = lerp(points[i], points[i + 1], t / 10);
       newPoints.push(updateZValue(point));
     }
   }
@@ -136,20 +136,19 @@ function updateData(features, callback) {
 }
 
 function downloadData() {
-  var newJsonData = JSON.stringify(jsonData);
-  var bb = new Blob([newJsonData], { type: 'text/plain' });
-  var a = document.createElement('a');
+  let newJsonData = JSON.stringify(jsonData);
+  let bb = new Blob([newJsonData], { type: 'text/plain' });
+  let a = document.createElement('a');
   a.download = 'new_' + fileName;
   a.href = window.URL.createObjectURL(bb);
   a.click();
 }
 
 function readFile(file) {
-  console.log(file);
   const reader = new FileReader();
   reader.addEventListener('load', (event) => {
     fileName = file.name;
-    var data = event.target.result;
+    let data = event.target.result;
     jsonData = JSON.parse(data);
     updateData(jsonData.features, downloadData);
   });
@@ -185,6 +184,6 @@ app.start('../assets/config/config.json').then(() => {
   renderer = new udviz.THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
-  const options = { color: new udviz.THREE.Color(0, 0, 0), lineWidth: 3 };
+  const options = { color: new udviz.THREE.Color(0, 0, 0), lineWidth: 4 };
   material = new MeshLineMaterial(options);
 });

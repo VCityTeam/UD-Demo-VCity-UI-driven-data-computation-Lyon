@@ -1,12 +1,12 @@
 import { THREE } from 'ud-viz';
 
 const raycaster = new THREE.Raycaster();
-var objectsToRaycast = [];
+let objectsToRaycast = [];
 
 function setObjects3D(tiles) {
   for (let tile of tiles) {
     if (tile) {
-      var obj3D = tile.getObject3D();
+      let obj3D = tile.getObject3D();
       if (obj3D) objectsToRaycast.push(obj3D);
     }
   }
@@ -29,8 +29,8 @@ function raycastObjects3D(rayOrigin, rayDirection) {
 
 export function raycastOnPoint(point) {
   let z = point[2] || 0
-  var origin = new THREE.Vector3(point[0], point[1], z + 9999);
-  var direction = new THREE.Vector3(0, 0, -1);
-  var positionOnGround = raycastObjects3D(origin, direction);
+  let origin = new THREE.Vector3(point[0], point[1], z + 9999);
+  let direction = new THREE.Vector3(0, 0, -1);
+  let positionOnGround = raycastObjects3D(origin, direction);
   return positionOnGround;
 }
