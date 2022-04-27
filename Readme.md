@@ -50,7 +50,7 @@ Roads __after__ update:
 The application can be locally (on your desktop) started in the following way
 ```
 npm install
-npm run debug      # integrates building
+npm run debug
 ```
 and then use your favorite (web) browser to open
 `http://localhost:8000/`.
