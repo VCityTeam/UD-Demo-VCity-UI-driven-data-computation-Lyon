@@ -28,7 +28,7 @@ function raycastObjects3D(rayOrigin, rayDirection) {
 }
 
 export function raycastOnPoint(point) {
-  let z = point[2] || 0
+  let z = point[2] || 0;
   let origin = new THREE.Vector3(point[0], point[1], z + 9999);
   let direction = new THREE.Vector3(0, 0, -1);
   let positionOnGround = raycastObjects3D(origin, direction);

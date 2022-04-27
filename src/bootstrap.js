@@ -96,7 +96,7 @@ function lerp(pointA, pointB, t) {
 
 function updateZValue(point) {
   let positionOnGround = raycastOnPoint(point);
-  if (point.length < 3) point.push(0); 
+  if (point.length < 3) point.push(0);
   if (positionOnGround !== undefined) point[2] = positionOnGround.z;
   return point;
 }
