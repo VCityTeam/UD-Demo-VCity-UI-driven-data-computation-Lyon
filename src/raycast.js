@@ -12,11 +12,12 @@ function setObjects3D(tiles) {
   }
 }
 
-export function setObjectsToRaycast(layers) {
+export function setObjectsToRaycast(tilesManagers) {
   objectsToRaycast = [];
-  for (let [id, value] of Object.entries(layers)) {
-    if (id !== undefined && value[0].visible) setObjects3D(value[1].tiles);
-  }
+  tilesManagers.forEach((tilesManager) => {
+    if (tilesManager.layer.id !== undefined && tilesManager.layer.visible)
+      setObjects3D(tilesManager.tiles);
+  });
 }
 
 function raycastObjects3D(rayOrigin, rayDirection) {

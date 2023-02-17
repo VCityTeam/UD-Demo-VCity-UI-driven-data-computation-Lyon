@@ -2,9 +2,9 @@
 
 import * as udviz from 'ud-viz';
 import { raycastOnPoint, setObjectsToRaycast } from './raycast';
-import { MeshLine, MeshLineMaterial } from 'meshline';
+import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
 
-let layers = null;
+let tilesManagers = null;
 const app = new udviz.Templates.AllWidget();
 let scene = null;
 let camera = null;
@@ -57,7 +57,7 @@ function preventDefaults(e) {
 }
 
 function handleDrop(e) {
-  setObjectsToRaycast(layers);
+  setObjectsToRaycast(tilesManagers);
   let dt = e.dataTransfer;
   for (let file of dt.files) readFile(file);
 }
@@ -73,13 +73,12 @@ function drawLine(coords) {
   for (let coord of coords) {
     points.push(coord[0], coord[1], coord[2] + 0.5);
   }
-  const line = new MeshLine();
+  const line = new MeshLineGeometry();
   line.setPoints(points);
 
   const mesh = new udviz.THREE.Mesh(line, material);
   scene.add(mesh);
-  renderer.render(scene, camera);
-  app.view.notifyChange(camera.camera3D);
+  app.view3D.getItownsView().notifyChange(camera.camera3D);
 }
 
 function lerp(pointA, pointB, t) {
@@ -156,22 +155,21 @@ function readFile(file) {
 }
 
 app.start('../assets/config/config.json').then(() => {
-  layers = app.setupAndAdd3DTilesLayers();
-
   ////// 3DTILES DEBUG
-  const debug3dTilesWindow = new udviz.Widgets.Extensions.Debug3DTilesWindow(
-    app.layerManager
+  const debug3dTilesWindow = new udviz.Widgets.Debug3DTilesWindow(
+    app.view3D.getLayerManager()
   );
   app.addModuleView('3dtilesDebug', debug3dTilesWindow, {
     name: '3DTiles Debug',
   });
 
   ////// LAYER CHOICE MODULE
-  const layerChoice = new udviz.Widgets.LayerChoice(app.layerManager);
+  const layerChoice = new udviz.Widgets.LayerChoice(app.view3D.getLayerManager());
   app.addModuleView('layerChoice', layerChoice);
 
-  scene = app.view.scene;
-  camera = app.view.camera.camera3D;
+  scene = app.view3D.scene;
+  camera = app.view3D.getItownsView().camera;
+  tilesManagers = app.view3D.getLayerManager().tilesManagers;
 
   // Add the buttons in the page
   let div = document.getElementById('_all_widget_menu');
@@ -180,6 +178,7 @@ app.start('../assets/config/config.json').then(() => {
   } else {
     div.appendChild(readFileButton);
   }
+
 
   renderer = new udviz.THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);

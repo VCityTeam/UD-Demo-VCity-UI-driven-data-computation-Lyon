@@ -23,8 +23,6 @@
     "max_y": "5180900"
   },
   "projection": "EPSG:3946",
-  "background_image_layer": {
-  },
   "camera": {
     "position": {
       "x": "1842058.906522941",
