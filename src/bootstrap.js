@@ -9,7 +9,6 @@ const app = new udviz.Templates.AllWidget();
 let scene = null;
 let camera = null;
 let body = document.body;
-let renderer = null;
 let material = null;
 let jsonData = null;
 let fileName = null;
@@ -179,10 +178,6 @@ app.start('../assets/config/config.json').then(() => {
     div.appendChild(readFileButton);
   }
 
-
-  renderer = new udviz.THREE.WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
   const options = { color: new udviz.THREE.Color(0, 0, 0), lineWidth: 4 };
   material = new MeshLineMaterial(options);
 });
